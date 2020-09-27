@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom';
 
 const StatisticLine = (props) => {
   return(
-    <div>{props.text} {props.value}</div>
+    <tr>
+      <td>{props.text}</td>
+      <td>{props.value}</td>
+    </tr>
   )
 }
-
 const Button = (props) => {
   return(
     <button onClick={props.buttonValue}>{props.buttonText}</button>
   )
 }
-
-
 const Statistic = (props) => {
 
     const handleStatic = () => {
@@ -21,27 +21,31 @@ const Statistic = (props) => {
         return (<p>No feedback given</p>)
       }else{
         return(
-        <div>
+        <table>
+          <tbody>
           <StatisticLine text="good"value={props.good} />
           <StatisticLine text="bad"value={props.bad} />
           <StatisticLine text="neutral"value={props.neutral} />
           <StatisticLine text="all"value={props.all} />
           <StatisticLine text="average"value={props.average/props.all} />
           <StatisticLine text="positive"value={props.average/props.good*100 + "%"} />
-        </div>
+          </tbody>
+        </table>
         )
       }
-
  }
   return(
         <div>
-          <h1>give feedback</h1>
-          <Button buttonText ="good" buttonValue={props.handleGood}/>
-          <Button buttonText ="bad" buttonValue={props.handleBad}/>
-          <Button buttonText ="neutral" buttonValue={props.handleNeutral}/>
-          <h1>statistic</h1>
+          <div>
+            <h1>give feedback</h1>
+              <Button buttonText ="good" buttonValue={props.handleGood}/>
+              <Button buttonText ="bad" buttonValue={props.handleBad}/>
+              <Button buttonText ="neutral" buttonValue={props.handleNeutral}/>
+          </div>
+          
           {handleStatic()}
-        </div>
+          </div>
+       
   )
 }
 
@@ -73,8 +77,16 @@ const App = () => {
 
   return (
     <div>
-      <Statistic handleBad = {handleBad} handleGood = {handleGood} handleNeutral = {handleNeutral} 
-                  good={good} bad={bad} neutral={neutral} average={average} all={all}/>
+      <Statistic 
+      handleBad = {handleBad} 
+      handleGood = {handleGood} 
+      handleNeutral = {handleNeutral} 
+      good={good}
+      bad={bad}
+      neutral={neutral}
+      average={average}
+      all={all}
+      />
     </div>
   )
 }
