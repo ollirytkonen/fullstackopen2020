@@ -15,7 +15,6 @@ const Button = (props) => {
   )
 }
 const Statistic = (props) => {
-
     const handleStatic = () => {
       if(props.all === 0){
         return (<p>No feedback given</p>)
@@ -42,10 +41,8 @@ const Statistic = (props) => {
               <Button buttonText ="bad" buttonValue={props.handleBad}/>
               <Button buttonText ="neutral" buttonValue={props.handleNeutral}/>
           </div>
-          
           {handleStatic()}
           </div>
-       
   )
 }
 
