@@ -1,22 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AddPerson from './components/addPerson'
 import RenderAll from './components/renderAll'
 import Filter from './components/filter'
+import axios from 'axios'
+
+
 
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      number: "0505187509"
-  },
-    { name: 'Simo Niskanen',
-    number: "0505187507"
-  },
-  ])
+
+  const [ persons, setPersons] = useState([])
 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newFilter, setNewFiler ] = useState('')
   const [ showAll, setShowAll ] = useState(true)
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(res => {
+        console.log('promise fulfilled')
+        setPersons(res.data)
+      })
+  }, [])
 
   const personsToShow = showAll
   ? persons.filter(person => person.name.toLowerCase().indexOf(newFilter.toLowerCase()) > -1)
