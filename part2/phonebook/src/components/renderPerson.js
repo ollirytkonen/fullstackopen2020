@@ -4,10 +4,9 @@ const RenderPerson = (props) => {
     console.log(props)
     return(
 
-        <ul>{props.personsToShow.map(person =>
+        <ul className="list">{props.personsToShow.map(person =>
         <li key={person.id}>
-            {person.name} 
-            {person.number} 
+            {person.name} {person.number} 
             <button key={person.id} onClick={()=> props.handleDelete(person.id)}>X</button>
             </li>)}
         </ul>
