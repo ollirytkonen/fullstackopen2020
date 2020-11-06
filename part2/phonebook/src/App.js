@@ -25,27 +25,34 @@ const App = () => {
       })
   }, [])
 
-  const addPerson = (event,) => {
+  const isNameTaken = (person) => {
+    return person.name === newName
+  }
+
+  const addPerson = (event) => {
     event.preventDefault()
     const findName = persons.map(person=> person.name).includes(newName)
-    const message = `${newName} haluatko päivittää numeron?`
+    const message = `Haluatko päivittää ${newName} numeron?`
     if(findName === true){
      const result = window.confirm(message);
-
-      if(result === true){
-      handleUpdate()
-      }else{
-        return null
-      }
+        if(result === true){
+          const info = persons.find(isNameTaken)
+          const id = info.id
+          handleUpdate(id)
+        }else{
+          setNewName('')
+          setNewNumber('')
+          return null
+        }
     }else{
       const person = {
         name: newName,
         number: newNumber
-      }
-      personService
+    }
+    personService
           .create(person)
-          .then(returnedPerson=> {
-            setPersons(persons.concat(returnedPerson))
+          .then(createdPerson=> {
+            setPersons(persons.concat(createdPerson))
             setNewName('')
             setNewNumber('')
             setSuccefulMessage(
@@ -54,11 +61,16 @@ const App = () => {
             setTimeout(() => {
               setSuccefulMessage(null)
             }, 3000)
+        })
+        .catch(error => {         
+          setErrorMessage(
+            `${error.response.data.error}`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })     
     }
-  }
-  const handleUpdate = (id) => {
-    
   }
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -69,7 +81,21 @@ const App = () => {
   const handleFilterChange = (event) => {
     setNewFiler(event.target.value)
   }
-  
+  const handleUpdate = (id) => {
+    const person = persons.find(n => n.id === id)
+    const changedPerson= { ...person, number: newNumber }
+    console.log("person = ",person)
+    console.log("changedperson = " ,changedPerson)
+
+   personService
+      .update(id, person)
+      .then(changedPerson=> {
+        setPersons(persons.map(person => person.id !== id ? person : changedPerson))
+      })
+      setNewName('')
+      setNewNumber('')
+  }
+
   const handleDelete = (id) => {
     const findPerson = persons.find(n => n.id === id)
     const result = window.confirm(`Haluatko poistaa ${findPerson.name} numeron?`);
@@ -86,11 +112,10 @@ const App = () => {
               setTimeout(() => {
                 setSuccefulMessage(null)
               }, 5000)
-
         })
         .catch(error => {
           setErrorMessage(
-            `Note '${findPerson.name}' was already removed from server`
+            `Person '${findPerson.name}' was already removed from server`
           )
           setTimeout(() => {
             setErrorMessage(null)

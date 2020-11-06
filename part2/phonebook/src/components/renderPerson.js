@@ -1,7 +1,6 @@
 import React from 'react'
 
 const RenderPerson = (props) => {
-    console.log(props)
     return(
 
         <ul className="list">{props.personsToShow.map(person =>
