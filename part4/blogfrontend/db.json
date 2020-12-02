@@ -1,0 +1,32 @@
+{
+  "blogs": [
+    {
+      "id": 1,
+      "author": "Hilla Heiskanen",
+      "title": "Juoksuhaudan tie",
+      "blogUrl": "www.homo.com",
+      "likes": 0
+    },
+    {
+      "id": 2,
+      "author": "Martti Nissinen",
+      "title": "Jokupaskakirja",
+      "blogUrl": "vitunpaska.com",
+      "likes": 0
+    },
+    {
+      "id": 3,
+      "author": "Simo Heiskanen",
+      "title": "Jeejee",
+      "blogUrl": "Hillaasdasdasd Heiskanen",
+      "likes": 0
+    },
+    {
+      "id": 4,
+      "author": "simo",
+      "title": "timo",
+      "blogUrl": "kimmo",
+      "likes": 0
+    }
+  ]
+}
