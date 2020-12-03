@@ -1,32 +1,38 @@
-import React, {useState, useEffect} from 'react'
-import Addblog from './components/Addblog'
-import Blogs from './components/Blogs'
+import React,{useState, useEffect} from 'react';
+import AddBlog from './components/AddBlog'
+import BlogList from './components/BlogList'
 import blogService from './services/blogs'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [author, setAuthor] = useState("")
   const [title, setTitle] = useState("")
-  const [blogUrl, setBlogUrl] = useState("")
-  const [likes, setLikes] = useState(0)
-
+  const [url, setUrl] = useState("")
+  const [blogs, setBlogs] = useState([])
 
   useEffect(() => {
-    blogService
-          .getAll()
-          .then(initialBlogs => {
+      blogService
+        .getAll()
+        .then(initialBlogs => {
           setBlogs(initialBlogs)
-      })
+        })
   }, [])
-
+  const handleAuthorChange = (event) => {
+    setAuthor(event.target.value)
+  }
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value)
+  }
+  const handleUrlChange = (event) => {
+    setUrl(event.target.value)
+  }
   const addBlog = (event) => {
     event.preventDefault()
     const blog = {
       id: blogs.length + 1,
       author: author,
       title: title,
-      blogUrl: blogUrl,
-      likes: likes,
+      url: url,
+      likes: 0
     }
     blogService
         .create(blog)
@@ -34,46 +40,44 @@ const App = () => {
           setBlogs(blogs.concat(returnedBlog))
           setAuthor("")
           setTitle("")
-          setBlogUrl("")
-        })
+          setUrl("")
+    })
   }
-  const handleAuthor = (event) => {
-    setAuthor(event.target.value)
-  }
-  const handleTitle = (event) => {
-    setTitle(event.target.value)
-  }
-  const handleUrl= (event) => {
-    setBlogUrl(event.target.value)
-  }
-  const handleLikes = (id) => {
-    const blog = blogs.find(n => n.id === id)
-    const changedBlog = { ...blog, likes: likes + 1}
-
+  
+  const handleVote = id => {
+    const blog = blogs.find(blog => blog.id === id)
+    const changedBlog = {...blog, likes: blog.likes +1 }
     blogService
-            .update(changedBlog, id)
-            .then(returnedBlog => {
-              setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
-            })
+      .update(id,changedBlog)
+      .then(returnedVote=> {
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedVote))
+      })      
+  }
+
+  const handleDelete = id => {
+    blogService
+        .deleteBlog(id)
+        .then( () => {
+          setBlogs(blogs.filter(blog => blog.id !== id))
+        })
   }
   return(
     <div>
-      <Addblog 
+      <AddBlog 
       addBlog={addBlog}
-      author={author} 
-      handleAuthor={handleAuthor}
+      handleAuthorChange={handleAuthorChange}
+      handleTitleChange={handleTitleChange}
+      handleUrlChange={handleUrlChange}
+      author={author}
       title={title}
-      handleTitle={handleTitle}
-      blogUrl={blogUrl}
-      handleUrl={handleUrl}
+      url={url}
       />
-      <Blogs blogs={blogs}
-      handleLikes={handleLikes}
-      setLikes={setLikes}
-      likes={likes}
+      <BlogList
+        handleDelete={handleDelete}
+        handleVote={handleVote}
+        blogs={blogs}
       />
     </div>
   )
 }
-
 export default App;

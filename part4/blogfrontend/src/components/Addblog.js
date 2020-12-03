@@ -1,19 +1,15 @@
-import React from 'react'
+import React from 'react';
 
-const Addblog = (props) => {
-  
+const AddBlog = (props) => {
+
   return(
-      <div>
-        <h2>Add Blog</h2>
-        <form onSubmit={props.addBlog}>
-            Author: <input value={props.author}onChange={props.handleAuthor}/><br/>
-            Title: <input value={props.title}onChange={props.handleTitle}/><br/>
-            Url: <input value={props.blogUrl} onChange={props.handleUrl}/><br/>
-            <button type="submit">Add</button>
-        </form>
-    </div>
-      
+    <form type ="submit" onSubmit={props.addBlog}>
+        <h1>Add Blog</h1>
+        Author: <input value={props.author} onChange={props.handleAuthorChange} required/><br/>
+        Title: <input value={props.title} onChange={props.handleTitleChange} required/><br/>
+        BLOG Url: <input value={props.url} onChange={props.handleUrlChange} required/><br/>
+        <button type="submit">Add Blog</button> 
+    </form>
   )
 }
-
-export default Addblog;
+export default AddBlog;
